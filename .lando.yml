@@ -1,0 +1,59 @@
+name: waterfall
+recipe: drupal9
+config:
+  framework: drupal9
+  site: waterfall
+  xdebug: false
+  # Enable the SOLR index
+  index: true
+  # Enable the VARNISH edge
+  edge: true
+  # Enable the REDIS cache
+  cache: true
+  composer_version: "2.2.12"
+  webroot: web
+  php: 8.1
+  config:
+    database: mysql
+    xdebug: true
+services:
+  defaults:
+    type: node:14
+  appserver:
+    build_as_root:
+      # Note that you will want to use the script for the major version of node you want to install
+      # See: https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
+      - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+      - apt-get install -y nodejs
+      - npm install --global gulp
+    run_as_root:
+      - "npm install -g grunt-cli gulp-cli bower -y"
+    run:
+      - "cd $LANDO_MOUNT && npm install && grunt --timer --quiet --no-validate"
+  database:
+    type: mysql:8.0
+  php:
+    type: php:8.1
+  node:
+    type: node:14
+    build:
+      - npm install
+      - gulp
+    globals:
+      gulp-cli: 2.3.0
+  phpmyadmin:
+    type: phpmyadmin
+    hosts:
+      - database
+proxy:
+  phpmyadmin:
+    - phpmyadmin.waterfall-dev.lndo.site
+tooling:
+  npm:
+    service: node
+  node:
+    service: node
+  gulp:
+    service: node
+  yarn:
+    service: node
