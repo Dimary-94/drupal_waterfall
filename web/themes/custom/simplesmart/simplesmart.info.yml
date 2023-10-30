@@ -1,0 +1,24 @@
+name: Simple Smart Stable Version
+type: theme
+description: "A sleek & practical theme for curios minds."
+core_version_requirement: ^9 || ^10
+base theme: stable9
+screenshot: simplesmartscreenshot.png
+
+libraries:
+  - simplesmart/main-lib
+  - simplesmart/picturefill
+
+stylesheets-remove:
+  - core/assets/vendor/jquery.ui/themes/base/dialog.css
+  - core/assets/vendor/jquery.ui/themes/base/theme.css
+  - core/themes/stable9/css/system/system.admin.css
+
+regions:
+  header: "Header"
+  copyright: "Copppp"
+  navigation: "Navigation"
+  content: "Content"
+  footer: "Footer"
+  page_top: "Page top"
+  pahe_bpttom: "Page bottom"
