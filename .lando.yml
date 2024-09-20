@@ -3,19 +3,11 @@ recipe: drupal9
 config:
   framework: drupal9
   site: waterfall
-  xdebug: false
-  # Enable the SOLR index
-  index: true
-  # Enable the VARNISH edge
-  edge: true
-  # Enable the REDIS cache
-  cache: true
-  composer_version: "2.2.12"
+  edge: false
   webroot: web
-  php: 8.1
+  php: 8.2
   config:
     database: mysql
-    xdebug: true
 services:
   defaults:
     type: node:14
@@ -27,13 +19,14 @@ services:
       - apt-get install -y nodejs
       - npm install --global gulp
     run_as_root:
-      - "npm install -g grunt-cli gulp-cli bower -y"
+      - "a2enmod headers && service apache2 reload"
+      - "cd $LANDO_MOUNT && cd web/themes/custom/waterfall && npm install -g grunt-cli gulp-cli bower -y"
     run:
-      - "cd $LANDO_MOUNT && npm install && grunt --timer --quiet --no-validate"
+      - "cd $LANDO_MOUNT && cd web/themes/custom/waterfall && npm install && grunt --timer --quiet --no-validate"
   database:
     type: mysql:8.0
   php:
-    type: php:8.1
+    type: php:8.2
   node:
     type: node:14
     build:
